@@ -1,0 +1,288 @@
+/* Modern responsive UI for RNG app
+   - Neumorphic look using CSS variables per theme (theme-light / theme-dark)
+   - Responsive container (uses min()/max-width) and larger, clear result display
+   - Styled switch, inputs, buttons, and result area
+   - Mobile adjustments via media queries
+*/
+
+/* Theme variables (kept from your original setup) */
+.theme-light {
+    --body-bg: #D8DEE9;
+    --element-bg: #e5e9f0;
+    --element-shadow: #c5c8ce;
+    --element-shadow-accent: #ffffff;
+    --color-text: #2E3440;
+    --color-muted: #55607a;
+    --color-accent: #ebcb8b;
+    --accent-2: #8fbcbb;
+    --glass: rgba(255,255,255,0.4);
+}
+
+.theme-dark {
+    --body-bg: linear-gradient(180deg, #23262e 0%, #2e3440 100%);
+    --element-bg: #2e3440;
+    --element-shadow: #20242c;
+    --element-shadow-accent: #333a47;
+    --color-text: #eceff4;
+    --color-muted: #aeb6c6;
+    --color-accent: #88c0d0;
+    --accent-2: #81a1c1;
+    --glass: rgba(255,255,255,0.03);
+}
+
+/* Base layout */
+* { box-sizing: border-box; }
+html, body {
+    height: 100%;
+    margin: 0;
+    font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+                 Roboto, "Helvetica Neue", Arial;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background: var(--body-bg);
+    color: var(--color-text);
+}
+
+/* Centering container with some breathing room */
+body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(16px, 4vw, 48px);
+}
+
+/* Main card */
+.content{
+    width: min(420px, 94%);
+    max-width: 420px;
+    padding: clamp(20px, 4vw, 36px);
+    border-radius: 20px;
+    background: linear-gradient(180deg, var(--element-bg) 0%, color-mix(in srgb, var(--element-bg) 90%, black 10%) 100%);
+    box-shadow:
+        18px 18px 36px var(--element-shadow),
+        -12px -12px 30px var(--element-shadow-accent);
+    display: grid;
+    gap: 12px;
+    align-items: center;
+    justify-items: center;
+    position: relative;
+}
+
+/* Small caption at top-right for theme switch */
+.switch {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    display: inline-block;
+    width: 56px;
+    height: 32px;
+}
+
+/* Checkbox hidden, slider shown */
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+/* Modern slider background */
+.slider {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, var(--accent-2), var(--color-accent));
+    border-radius: 999px;
+    box-shadow: inset 2px 2px 6px rgba(0,0,0,0.15);
+    transition: all 280ms ease;
+}
+
+/* thumb */
+.slider:before {
+    content: "";
+    position: absolute;
+    left: 4px;
+    top: 4px;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: var(--element-bg);
+    box-shadow: 2px 2px 6px var(--element-shadow);
+    transition: transform 280ms cubic-bezier(.2,.9,.3,1);
+}
+
+/* move thumb when checked */
+input:checked + .slider:before {
+    transform: translateX(24px);
+}
+
+/* Form fields layout */
+.field{
+    width: 100%;
+    display: block;
+
+}
+
+/* Inputs - larger, more modern style */
+input[type="number"], input[type="text"] {
+    width: 100%;
+    height: 52px;
+    padding: 14px 18px;
+    font-size: 20px;
+    color: var(--color-text);
+    background: linear-gradient(180deg, color-mix(in srgb, var(--element-bg) 98%, white 2%), var(--element-bg));
+    border: none;
+    outline: none;
+    border-radius: 14px;
+    box-shadow: inset 4px 4px 10px var(--element-shadow), inset -6px -6px 14px var(--element-shadow-accent);
+    transition: box-shadow 220ms ease, transform 120ms ease;
+}
+
+/* Focus state */
+input[type="number"]:focus {
+    transform: translateY(-2px);
+    box-shadow:
+        18px 18px 36px rgba(0,0,0,0.08),
+        -14px -14px 28px rgba(255,255,255,0.02),
+        inset 6px 6px 14px var(--element-shadow);
+}
+
+/* Placeholder muted */
+input::placeholder {
+    color: var(--color-muted);
+    opacity: 0.9;
+}
+
+/* Remove native number spinner */
+input[type=number]::-webkit-outer-spin-button,
+input[type=number]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+input[type=number] {
+    -moz-appearance:textfield;
+}
+
+/* Controls row (no-repeat + reset) */
+.content .controls,
+.content .controls * { box-sizing: border-box; }
+
+label[for="noRepeatCheckbox"], label input[type="checkbox"] {
+    cursor: pointer;
+}
+
+/* Style inline checkbox (no-repeat) */
+.content input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    margin-right: 8px;
+    accent-color: var(--color-accent);
+}
+
+/* Buttons (Generate / Reset) */
+button.submit, input.submit {
+    min-width: 120px;
+    height: 44px;
+    padding: 8px 18px;
+    font-size: 15px;
+    color: var(--color-text);
+    background: linear-gradient(180deg, color-mix(in srgb, var(--element-bg) 96%, white 4%), var(--element-bg));
+    border: none;
+    border-radius: 999px;
+    cursor: pointer;
+    box-shadow: 6px 6px 16px rgba(0,0,0,0.12), -6px -6px 14px rgba(255,255,255,0.03);
+    transition: transform 120ms ease, box-shadow 120ms ease;
+}
+
+/* Primary action style for Generate */
+#generateBtn {
+    background: linear-gradient(90deg, var(--accent-2), var(--color-accent));
+    color: black;
+    box-shadow: 0 10px 24px rgba(0,0,0,0.18), inset 0 -2px 6px rgba(0,0,0,0.12);
+}
+
+/* Secondary / reset button */
+#resetBtn {
+    background: transparent;
+    border: 1px solid color-mix(in srgb, var(--element-shadow) 70%, transparent);
+    color: var(--color-muted);
+}
+
+/* Button active state */
+button.submit:active, input.submit:active {
+    transform: translateY(2px) scale(0.996);
+    box-shadow: inset 2px 2px 8px rgba(0,0,0,0.12);
+}
+
+/* Result display */
+#divResult {
+    width: 100%;
+    min-height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+}
+
+#resultLabel {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 160px;
+    padding: 12px 18px;
+    border-radius: 12px;
+    font-size: clamp(80px, 3.6vw, 28px);
+    font-weight: 600;
+    color: var(--color-text);
+    background: linear-gradient(180deg, color-mix(in srgb, var(--element-bg) 92%, var(--glass) 8%), color-mix(in srgb, var(--element-bg) 86%, black 4%));
+    box-shadow: 10px 10px 30px rgba(0,0,0,0.08), -8px -8px 20px rgba(255,255,255,0.02);
+    letter-spacing: 0.6px;
+}
+
+/* Small meta text inside result (remaining) */
+#resultLabel small {
+    display: block;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--color-muted);
+    margin-top: 6px;
+}
+
+/* Footer / hint text (if added later) */
+.hint {
+    font-size: 13px;
+    color: var(--color-muted);
+}
+
+/* Responsive tweaks */
+@media (max-width: 420px) {
+    .content {
+        padding: 18px;
+        border-radius: 16px;
+    }
+    input[type="number"] {
+        height: 48px;
+        font-size: 15px;
+    }
+    button.submit {
+        height: 42px;
+        font-size: 14px;
+    }
+    #resultLabel {
+        min-width: 140px;
+        padding: 10px 14px;
+        font-size: 20px;
+    }
+}
+
+/* Very small phones */
+@media (max-width: 340px) {
+    #resultLabel {
+        font-size: 18px;
+    }
+    .switch { transform: scale(0.9); transform-origin: top right; }
+}
+
+/* High-contrast / accessibility helper (prefers-contrast) */
+@media (prefers-contrast: more) {
+    .content { box-shadow: none; border: 1px solid rgba(0,0,0,0.08); }
+    #resultLabel { box-shadow: none; outline: 2px solid rgba(0,0,0,0.06); }
+}

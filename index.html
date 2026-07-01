@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title>LOMBA LKGT</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <link rel="stylesheet" href="style.css" />
+    <script src="script.js" defer></script>
+</head>
+
+<noscript>
+    Browser Anda tidak mendukung (atau JavaScript dinonaktifkan).
+    JavaScript diperlukan untuk menghasilkan angka dan mengganti tema.
+</noscript>
+
+<body>
+    
+    <label class="switch">
+        <input type="checkbox" id="inputCheckbox" onclick="toggleTheme()">
+        <span class="slider round" name="spanSlider"></span>
+    </label>
+
+    <form class="content" onsubmit="return false;"><img src="logo.png" width="60" height="80"><br>
+        <div class="field">
+            <input type="number" id="inputMin" aria-label="minimal"
+                class="input-field" placeholder="min" 
+                onclick="inputAnimate(this)" /> 
+        </div>
+
+        <br/>
+
+        <div class="field">
+            <input type="number" id="inputMax" aria-label="maximum" 
+                class="input-field" placeholder="max"
+                onclick="inputAnimate(this)" /> 
+        </div>
+        
+        <br/>
+
+        <div style="display:flex; gap:8px; align-items:center; justify-content:center; margin-bottom:10px;">
+            <label style="font-size:14px;">
+                <input type="checkbox" id="noRepeatCheckbox" />
+                No Repeat
+            </label>  <br>
+            <button type="button" id="resetBtn" class="submit" onclick="resetHistory()">Reset history</button><br>
+        </div>
+        
+        <div id="divResult" style="min-height:28px;"></div>
+        
+        <br />
+        
+        <button type="button" id="generateBtn" class="submit"
+            onclick="Random()">MULAI</button>
+    </form>
+
+</body>
+
+</html>
